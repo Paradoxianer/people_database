@@ -18,8 +18,8 @@
  * @OnlyCurrentDoc  Limits the script to only accessing the current document.
  */
 
-var DIALOG_TITLE = 'Example Dialog';
-var SIDEBAR_TITLE = 'Example Sidebar';
+var DIALOG_TITLE = 'Settings';
+var SIDEBAR_TITLE = 'People';
 
 /**
  * Adds a custom menu with items to show the sidebar and dialog.
@@ -30,7 +30,7 @@ function onOpen(e) {
   DocumentApp.getUi()
       .createAddonMenu()
       .addItem('Show sidebar', 'showSidebar')
-      .addItem('Show dialog', 'showDialog')
+      .addItem('Settings', 'showDialog')
       .addToUi();
 }
 
@@ -109,3 +109,5 @@ function setDocTitle(title) {
   // Use data collected from dialog to manipulate the document.
   DocumentApp.getActiveDocument().setName(title);
 }
+
+// -> implement prefernces https://github.com/googlesamples/apps-script-mobile-addons/blob/master/mobile-translate/Code.gs
