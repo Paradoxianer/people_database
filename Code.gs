@@ -20,6 +20,8 @@
 
 var DIALOG_TITLE = 'Settings';
 var SIDEBAR_TITLE = 'People';
+var CHARACTERISTIKS=[["Name"],["Spitzname"],["Beschreibung"],["Beruf"],["Körper"],["Zitate"]];
+
 
 /**
  * Adds a custom menu with items to show the sidebar and dialog.
@@ -30,7 +32,7 @@ function onOpen(e) {
   DocumentApp.getUi()
       .createAddonMenu()
       .addItem('Show sidebar', 'showSidebar')
-      .addItem('Settings', 'showDialog')
+      .addItem('Settings', 'showSettings')
       .addToUi();
 }
 
@@ -60,7 +62,7 @@ function showSidebar() {
  * Opens a dialog. The dialog structure is described in the Dialog.html
  * project file.
  */
-function showDialog() {
+function showSettings() {
   var ui = HtmlService.createTemplateFromFile('Dialog')
       .evaluate()
       .setWidth(400)
