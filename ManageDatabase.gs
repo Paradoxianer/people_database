@@ -80,10 +80,10 @@ function getSheet(){
 
 
 /**
- * first load our database 
- * and the sheet which is named "People"
+ * search throught our database for the given name
+ * and return the caracteristiks + our data column
  *
- * @return {Sheet}   the Sheet where the first colum was filled
+ * @return multidimensional array whit the first column containing the title and the second the data
  */
 function getEntry(name) {
   var data = getSheet().getDataRange().getValues();
@@ -103,6 +103,41 @@ function getEntry(name) {
     }
   }
   return null;
+}
+
+/**
+ * go through all columns and rows of the database
+ * and delete every empty row and every empty colum
+ * so that we keep our database always clean and tight
+ *
+ */
+function cleanUpEmpty(){
+  var sheet = getSheet();
+  removeEmptyColumns(sheet);
+  removeEmptyRows(sheet);
+}
+
+
+//Remove All Empty Columns in the given Sheet
+function removeEmptyColumns(sheet) {
+  var maxColumns = sheet.getMaxColumns(); 
+  var lastColumn = sheet.getLastColumn();
+  if (maxColumns-lastColumn != 0){
+      sheet.deleteColumns(lastColumn+1, maxColumns-lastColumn);
+  }
+}
+
+//Remove All Empty Rows in the given Sheet
+function removeEmptyRows(sheet) {
+  var maxRows = sheet.getMaxRows(); 
+  var lastRow = sheet.getLastRow();
+  if (maxRows-lastRow != 0){
+      sheet.deleteRows(lastRow+1, maxRows-lastRow);
+  }
+}
+
+function updateEntry(name) {
+
 }
 
 // -> implement prefernces https://github.com/googlesamples/apps-script-mobile-addons/blob/master/mobile-translate/Code.gs
