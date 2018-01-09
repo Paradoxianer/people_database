@@ -20,7 +20,10 @@
 
 var DIALOG_TITLE = 'Settings';
 var SIDEBAR_TITLE = 'People';
-var CHARACTERISTIKS=[["Name"],["Spitzname"],["Beschreibung"],["Beruf"],["Körper"],["Zitate"]];
+var PEOPLE_DATA = 'PEOPLE_DATA';
+var PEOPLE_ENDING = '_Protagonists'
+var CHARACTERISTIKS = [["Name"],["Spitzname"],["Beschreibung"],["Beruf"],["Körper"],["Zitate"]];
+
 
 
 /**
@@ -70,4 +73,3 @@ function showSettings() {
       .setSandboxMode(HtmlService.SandboxMode.IFRAME);
   DocumentApp.getUi().showModalDialog(ui, DIALOG_TITLE);
 }
-

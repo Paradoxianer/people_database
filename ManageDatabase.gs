@@ -1,42 +1,65 @@
 /**
- * Returns the existing footer text (if any).
+ * Returns the word at the current cursor location in the document.
  *
- * @return {String} existing document footer text (as a plain string).
+ * @return {string}   The word at cursor location. returns null if there is no word selected
  */
-function getFooterText() {
-  // Retrieve and return the information requested by the sidebar.
-  return DocumentApp.getActiveDocument().getFooter().getText();
+function getCursorWord() {
+  var cursor = DocumentApp.getActiveDocument().getCursor();
+  var word = null;
+  if (cursor) {
+      Logger.log(cursor);
+      var offset = cursor.getSurroundingTextOffset();
+      var text = cursor.getSurroundingText().getText();
+      word = getWordAt(text,offset);
+      if (word == "") word = null;
+  }
+  return word;
 }
 
 /**
- * Replaces the current document footer with the given text.
- *
- * @param {String} footerText text collected from the client-side
- *     sidebar.
+ * Returns the word at the index 'pos' in 'str'.
+ * From https://stackoverflow.com/questions/5173316/finding-the-word-at-a-position-in-javascript/5174867#5174867
  */
-function setFooterText(footerText) {
-  // Use data collected from sidebar to manipulate the document.
-  DocumentApp.getActiveDocument().getFooter().setText(footerText);
+function getWordAt(str, pos) {
+  Logger.log("getWordAt()");
+  // Perform type conversions.
+  str = String(str);
+  pos = Number(pos) >>> 0;
+  // Search for the word's beginning and end.
+  var left = str.slice(0, pos).search(/\S+$/),
+      right = str.slice(pos-1).search(/\s/);
+  // The last word in the string is a special case.
+  if (right < 0) {
+    return str.slice(left);
+  }
+  // Return the word, using the located bounds to extract it from the string.
+  return str.slice(left, right + pos);
 }
 
-/**
- * Returns the document title.
- *
- * @return {String} the current document title.
- */
-function getDocTitle() {
-  // Retrieve and return the information requested by the dialog.
-  return DocumentApp.getActiveDocument().getName();
-}
 
-/**
- * Changes the document title.
- *
- * @param {String} title the new title to use for the document.
- */
-function setDocTitle(title) {
-  // Use data collected from dialog to manipulate the document.
-  DocumentApp.getActiveDocument().setName(title);
+
+
+function getDatabase(){
+  var documentProperties = PropertiesService.getDocumentProperties();
+  var name = documentProperties.getProperty('PEOPLE_DATA');
+  if (name == null){
+    name = DocumentApp.getActiveDocument().getName();
+    name=name+"_Protagonists";
+    documentProperties.setProperty('PEOPLE_DATA', name);
+  }
+  var files = DriveApp.getFilesByName(name);
+  var file = null;
+  while (files.hasNext()) {
+     file = files.next();
+  }
+  var ssNew = null;
+  if (file == null){
+    ssNew = createDatabase(name)
+  }
+  else{
+    ssNew = SpreadsheetApp.open(file);
+  }
+  return ssNew;
 }
 
 // -> implement prefernces https://github.com/googlesamples/apps-script-mobile-addons/blob/master/mobile-translate/Code.gs
