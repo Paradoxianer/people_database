@@ -1,65 +1,46 @@
 /**
- * Returns the word at the current cursor location in the document.
+ * Returns the spreadsheet
+ * if there is no spreadsheet stored in the documentsettings 
+ * we generate a spreadsheet with the name of the document + "_Protagonist" at the end
+ * then we store the id of the generated spreadheet in the documentsettings
  *
  * @return {string}   The word at cursor location. returns null if there is no word selected
  */
-function getCursorWord() {
-  var cursor = DocumentApp.getActiveDocument().getCursor();
-  var word = null;
-  if (cursor) {
-      Logger.log(cursor);
-      var offset = cursor.getSurroundingTextOffset();
-      var text = cursor.getSurroundingText().getText();
-      word = getWordAt(text,offset);
-      if (word == "") word = null;
-  }
-  return word;
-}
-
-/**
- * Returns the word at the index 'pos' in 'str'.
- * From https://stackoverflow.com/questions/5173316/finding-the-word-at-a-position-in-javascript/5174867#5174867
- */
-function getWordAt(str, pos) {
-  Logger.log("getWordAt()");
-  // Perform type conversions.
-  str = String(str);
-  pos = Number(pos) >>> 0;
-  // Search for the word's beginning and end.
-  var left = str.slice(0, pos).search(/\S+$/),
-      right = str.slice(pos-1).search(/\s/);
-  // The last word in the string is a special case.
-  if (right < 0) {
-    return str.slice(left);
-  }
-  // Return the word, using the located bounds to extract it from the string.
-  return str.slice(left, right + pos);
-}
-
-
-
-
 function getDatabase(){
   var documentProperties = PropertiesService.getDocumentProperties();
-  var name = documentProperties.getProperty('PEOPLE_DATA');
-  if (name == null){
-    name = DocumentApp.getActiveDocument().getName();
-    name=name+"_Protagonists";
-    documentProperties.setProperty('PEOPLE_DATA', name);
-  }
-  var files = DriveApp.getFilesByName(name);
-  var file = null;
-  while (files.hasNext()) {
-     file = files.next();
-  }
+  var id = documentProperties.getProperty(PEOPLE_DATA);
   var ssNew = null;
-  if (file == null){
+  if (id == null){
+    name = DocumentApp.getActiveDocument().getName();
+    name=name+PEOPLE_ENDING;
     ssNew = createDatabase(name)
   }
-  else{
-    ssNew = SpreadsheetApp.open(file);
+  else {
+    ssNew = SpreadsheetApp.openById(id);
   }
   return ssNew;
 }
+
+/**
+ * Creates our database which is simply a spreadheet with the given name
+ * once created we rename the first Sheet to "People"
+ * and add a first column
+ *
+ * @return {Spreadsheet}   the created Spreadsheet
+ * @todo check the value returnd from SpreadsheetApp.create
+ */
+
+function createDatabase(name){
+  var documentProperties = PropertiesService.getDocumentProperties();
+  var ssNew = SpreadsheetApp.create(name);
+  if (ssNew!=null){
+    ssNew.setActiveSheet(ssNew.getSheets()[0]);
+    documentProperties.setProperty(PEOPLE_DATA, ssNew.getId());
+    ssNew.renameActiveSheet("People");
+    createCharacteristics(ssNew);
+  }
+  return ssNew;
+}
+
 
 // -> implement prefernces https://github.com/googlesamples/apps-script-mobile-addons/blob/master/mobile-translate/Code.gs
