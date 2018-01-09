@@ -70,3 +70,4 @@ function showSettings() {
       .setSandboxMode(HtmlService.SandboxMode.IFRAME);
   DocumentApp.getUi().showModalDialog(ui, DIALOG_TITLE);
 }
+
