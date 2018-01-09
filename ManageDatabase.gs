@@ -17,6 +17,7 @@ function getDatabase(){
   }
   else {
     ssNew = SpreadsheetApp.openById(id);
+    cleanUpEmpty();
   }
   return ssNew;
 }
@@ -52,11 +53,11 @@ function createDatabase(name){
  */
 function createCharacteristics(ssNew){ 
   var sheet = ssNew.getSheetByName(SHEET_NAME);
-  Logger.log(sheet);
   if (sheet == null){
     sheet = ssNew.insertSheet(SHEET_NAME)
   }
   sheet.getRange(1, 1, 6, 1).setValues(CHARACTERISTIKS);
+  cleanUpEmpty();
   return sheet;
 }
 
@@ -113,6 +114,7 @@ function getEntry(name) {
  */
 function cleanUpEmpty(){
   var sheet = getSheet();
+  Logger.log("cleanupEmty from",sheet);
   removeEmptyColumns(sheet);
   removeEmptyRows(sheet);
 }
@@ -140,4 +142,19 @@ function updateEntry(name) {
 
 }
 
+/*
+ * returns the list of people stored in the database 
+ * + one selected characteristik
+ */
+function getPeople(){
+  var data = getSheet().getDataRange().getValues();
+  var people = new Array(data[0].length);
+  var i = 1;
+  for (i in data[0]) {
+    people[i] = new Array(2);
+    people[i][0] = data[0][i];
+    people[i][1] = data[1][i];
+  }
+  return people;
+}
 // -> implement prefernces https://github.com/googlesamples/apps-script-mobile-addons/blob/master/mobile-translate/Code.gs

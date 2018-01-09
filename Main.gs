@@ -36,6 +36,7 @@ function onOpen(e) {
       .addItem('Show sidebar', 'showSidebar')
       .addItem('Settings', 'showSettings')
       .addToUi();
+      getDatabase();
 }
 
 /**
@@ -110,3 +111,4 @@ function getWordAt(str, pos) {
   // Return the word, using the located bounds to extract it from the string.
   return str.slice(left, right + pos);
 }
+
