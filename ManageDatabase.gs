@@ -27,7 +27,6 @@ function getDatabase(){
  * and add a first column
  *
  * @return {Spreadsheet}   the created Spreadsheet
- * @todo check the value returnd from SpreadsheetApp.create
  */
 
 function createDatabase(name){
@@ -40,6 +39,25 @@ function createDatabase(name){
     createCharacteristics(ssNew);
   }
   return ssNew;
+}
+
+
+/**
+ * gets the sheet which is named "People"
+ * and initalize the first colum with our given values 
+ * stored in the multidimensinal Array 'CHARACTERISTIKS'
+ *
+ * @return {Sheet}   the Sheet where the first colum was filled
+ * @todo if "People" Sheet was not found.. just create one
+ */
+function createCharacteristics(ssNew){ 
+  var sheet = ssNew.getSheetByName("People");
+  Logger.log(sheet);
+  if (sheet == null){
+    sheet = ssNew.insertSheet("People")
+  }
+  sheet.getRange(1, 1, 6, 1).setValues(CHARACTERISTIKS);
+  return sheet;
 }
 
 
