@@ -35,7 +35,7 @@ function createDatabase(name){
   if (ssNew!=null){
     ssNew.setActiveSheet(ssNew.getSheets()[0]);
     documentProperties.setProperty(PEOPLE_DATA, ssNew.getId());
-    ssNew.renameActiveSheet("People");
+    ssNew.renameActiveSheet(SHEET_NAME);
     createCharacteristics(ssNew);
   }
   return ssNew;
@@ -51,14 +51,58 @@ function createDatabase(name){
  * @todo if "People" Sheet was not found.. just create one
  */
 function createCharacteristics(ssNew){ 
-  var sheet = ssNew.getSheetByName("People");
+  var sheet = ssNew.getSheetByName(SHEET_NAME);
   Logger.log(sheet);
   if (sheet == null){
-    sheet = ssNew.insertSheet("People")
+    sheet = ssNew.insertSheet(SHEET_NAME)
   }
   sheet.getRange(1, 1, 6, 1).setValues(CHARACTERISTIKS);
   return sheet;
 }
 
+
+/**
+ * first load our database 
+ * and the sheet which is named "People"
+ *
+ * @return {Sheet}   the Sheet where the first colum was filled
+ */
+function getSheet(){
+  var spreadsheet = getDatabase();
+  if (spreadsheet != null){
+    var sheet = spreadsheet.getSheetByName(SHEET_NAME);
+    return sheet;
+  }
+  else{
+    return null;
+  } 
+}
+
+
+/**
+ * first load our database 
+ * and the sheet which is named "People"
+ *
+ * @return {Sheet}   the Sheet where the first colum was filled
+ */
+function getEntry(name) {
+  var data = getSheet().getDataRange().getValues();
+  var entries = new Array(CHARACTERISTIKS.length);
+  var found = false;
+  for (i in data[0]) {
+    if(data[0][i] == name) {
+      Logger.log("found: ",name);
+      for (q=0 ; q<CHARACTERISTIKS.length ;q++){
+            entries[q]=new Array(2);
+            entries[q][0]=CHARACTERISTIKS[q][0];
+            entries[q][1] = data[q][i];
+            Logger.log(data[q][i]);
+       }
+       found = true;
+       return entries;
+    }
+  }
+  return null;
+}
 
 // -> implement prefernces https://github.com/googlesamples/apps-script-mobile-addons/blob/master/mobile-translate/Code.gs
