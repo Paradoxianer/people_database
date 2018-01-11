@@ -171,7 +171,7 @@ function updateEntry(index,data) {
 
 /*
  * returns the list of people stored in the database 
- * + one selected characteristik
+ * one selected characteristik
  */
 function getPeople(){
   var data = getSheet().getDataRange().getValues();
@@ -185,6 +185,11 @@ function getPeople(){
   return people;
 }
 
+/*
+ * simply returns the whole database
+ *
+ */
+
 function getData(){
    var sheet =getSheet();
    var data = null;
@@ -193,4 +198,3 @@ function getData(){
    }
   return data;
 }
-// -> implement prefernces https://github.com/googlesamples/apps-script-mobile-addons/blob/master/mobile-translate/Code.gs
