@@ -28,6 +28,8 @@ function getDatabase(){
  * and add a first column
  *
  * @return {Spreadsheet}   the created Spreadsheet
+ * @todo check if the file already exist.... if so.. either change the name
+ * or open the existing one ?
  */
 
 function createDatabase(name){
@@ -156,5 +158,14 @@ function getPeople(){
     people[i][1] = data[1][i];
   }
   return people;
+}
+
+function getData(){
+   var sheet =getSheet();
+   var data = null;
+   if  (sheet!=NULL){
+     data = sheet.getDataRange().getValues();
+   }
+  return data;
 }
 // -> implement prefernces https://github.com/googlesamples/apps-script-mobile-addons/blob/master/mobile-translate/Code.gs
