@@ -10,14 +10,20 @@ function getDatabase(){
   var documentProperties = PropertiesService.getDocumentProperties();
   var id = documentProperties.getProperty(PEOPLE_DATA);
   var ssNew = null;
-  if (id == null){
-    name = DocumentApp.getActiveDocument().getName();
-    name=name+PEOPLE_ENDING;
-    ssNew = createDatabase(name)
+  var name = DocumentApp.getActiveDocument().getName();
+  name=name+PEOPLE_ENDING;
+  if (id == null){  
+    ssNew = createDatabase(name);
   }
   else {
-    ssNew = SpreadsheetApp.openById(id);
-    cleanUpEmpty();
+    //@todo check if return null if so create the Database new.. also check if the database is in the Trash if so we cant do anything
+    try{
+      ssNew = SpreadsheetApp.openById(id);
+    }
+    catch(e){
+      ssNew = createDatabase(name);
+    }
+    cleanUpEmpty(ssNew.getSheetByName(SHEET_NAME));
   }
   return ssNew;
 }
@@ -44,7 +50,6 @@ function createDatabase(name){
   return ssNew;
 }
 
-
 /**
  * gets the sheet which is named "People"
  * and initalize the first colum with our given values 
@@ -58,8 +63,8 @@ function createCharacteristics(ssNew){
   if (sheet == null){
     sheet = ssNew.insertSheet(SHEET_NAME)
   }
-  sheet.getRange(1, 1, 6, 1).setValues(CHARACTERISTIKS);
-  cleanUpEmpty();
+  sheet.getRange(1, 1, 1, CHARACTERISTIKS[0].length).setValues(CHARACTERISTIKS);
+  cleanUpEmpty(sheet);
   return sheet;
 }
 
@@ -81,6 +86,15 @@ function getSheet(){
   } 
 }
 
+function getEntryIndex(name) {
+  var data = getSheet().getDataRange().getValues();
+  for (i in data) {
+    if(data[i][0] == name) {
+       return i;
+    }
+  }
+  return null;
+}
 
 /**
  * search throught our database for the given name
@@ -90,16 +104,16 @@ function getSheet(){
  */
 function getEntry(name) {
   var data = getSheet().getDataRange().getValues();
-  var entries = new Array(CHARACTERISTIKS.length);
+  var entries = new Array(2);
+  entries[0]=new Array(CHARACTERISTIKS[0].length);
+  entries[1]=new Array(CHARACTERISTIKS[0].length);
   var found = false;
   for (i in data[0]) {
     if(data[0][i] == name) {
       Logger.log("found: ",name);
-      for (q=0 ; q<CHARACTERISTIKS.length ;q++){
-            entries[q]=new Array(2);
-            entries[q][0]=CHARACTERISTIKS[q][0];
-            entries[q][1] = data[q][i];
-            Logger.log(data[q][i]);
+      for (q=0 ; q<CHARACTERISTIKS[0].length ;q++){ 
+            entries[0][q]=CHARACTERISTIKS[0][q];
+            entries[1][q] = data[q][i];
        }
        found = true;
        return entries;
@@ -114,9 +128,7 @@ function getEntry(name) {
  * so that we keep our database always clean and tight
  *
  */
-function cleanUpEmpty(){
-  var sheet = getSheet();
-  Logger.log("cleanupEmty from",sheet);
+function cleanUpEmpty(sheet){
   removeEmptyColumns(sheet);
   removeEmptyRows(sheet);
 }
@@ -140,8 +152,21 @@ function removeEmptyRows(sheet) {
   }
 }
 
-function updateEntry(name) {
+/**
+ * if index = null means there is no entry yet in the database
+ * a new row is created
+ * else we replace the values with the new data
+ *
+ */
 
+function updateEntry(index,data) {
+    var sheet = getSheet();
+    if (index == null){
+      sheet.appendRow(data);
+    }
+    else{
+      sheet.getRange(index, 1, index, data[0].length).setValues(data);
+    }
 }
 
 /*

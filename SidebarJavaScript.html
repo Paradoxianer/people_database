@@ -21,21 +21,17 @@
    */
   $(function() {
     // Assign handler functions to sidebar elements here, if needed.
-    $('#sidebar-save-button').click(onSaveFooterClick);
+  
 
     // Call the server here to retrieve any information needed to build
     // the sidebar, if necessary.
     google.script.run
-       .withSuccessHandler(function(footerText) {
-            // Respond to success conditions here.
-            $('#sidebar-footer-text').val(footerText);
-            showStatus('Ready.');
-          })
+       .withSuccessHandler(showRecords)
        .withFailureHandler(function(msg) {
             // Respond to failure conditions here.
             showStatus(msg, 'error');
           })
-       .getFooterText();
+       .getData();
   });
 
   /**
@@ -80,6 +76,36 @@
     if (classId) {
       $('#sidebar-status').addClass(classId);
     }
+  }
+
+  /*
+   * Callback function to display a "record", or row of the spreadsheet.
+   *
+   * @param {object[]}  Array of field headings & cell values
+   */
+  function showRecords(record) {
+    if (record.length) {
+      for (var i = 0; i < record.length; i++) {
+        // build field name on the fly, formatted field-1234
+        var str = '' + i;
+        var fieldId = 'field-' + ('0000' + str).substring(str.length)
+
+        // If this field # doesn't already exist on the page, create it
+        if (!$('#'+fieldId).length) {
+          var newField = $($.parseHTML('<div id="'+fieldId+'"></div>'));
+          $('#sidebar-record-block').append(newField);
+        }
+
+        // Replace content of the field div with new record
+        $('#'+fieldId).replaceWith('<div id="'+fieldId+'" class="div-table-row"></div>');
+        $('#'+fieldId).append($('<div class="div-table-th">' + record[i].heading + '</div>'))
+                      .append('<div class="div-table-td">' + record[i].cellval + '</div>');
+      }
+    }
+
+    // TODO: hide any existing fields that are beyond the current record length
+
+    //Setup the next poll
   }
 
 </script>

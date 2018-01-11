@@ -14,15 +14,12 @@
  * limitations under the License.
  */
 
-/**
- * @OnlyCurrentDoc  Limits the script to only accessing the current document.
- */
 var DIALOG_TITLE = 'Settings';
 var SIDEBAR_TITLE = 'People';
 var SHEET_NAME = "People"
 var PEOPLE_DATA = 'PEOPLE_DATA';
 var PEOPLE_ENDING = "_Protagonists"
-var CHARACTERISTIKS = [["Name"],["Spitzname"],["Beschreibung"],["Beruf"],["Körper"],["Zitate"]];
+var CHARACTERISTIKS = [["Name","Spitzname","Beschreibung","Beruf","Körper","Zitate","Wo"]];
 
 
 /**
@@ -111,4 +108,3 @@ function getWordAt(str, pos) {
   // Return the word, using the located bounds to extract it from the string.
   return str.slice(left, right + pos);
 }
-
