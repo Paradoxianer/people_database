@@ -19,7 +19,7 @@ var SIDEBAR_TITLE = 'People';
 var SHEET_NAME = "People"
 var PEOPLE_DATA = 'PEOPLE_DATA';
 var PEOPLE_ENDING = "_Protagonists"
-var CHARACTERISTIKS = [["Name","Spitzname","Beschreibung","Beruf","Körper","Zitate","Wo"]];
+var CHARACTERISTIKS = [["Name","Spitzname","Beschreibung","Beruf","Körper","Zitate","links"]];
 
 
 /**

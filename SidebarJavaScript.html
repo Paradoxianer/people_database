@@ -98,8 +98,8 @@
 
         // Replace content of the field div with new record
         $('#'+fieldId).replaceWith('<div id="'+fieldId+'" class="div-table-row"></div>');
-        $('#'+fieldId).append($('<div class="div-table-th">' + record[i].heading + '</div>'))
-                      .append('<div class="div-table-td">' + record[i].cellval + '</div>');
+        $('#'+fieldId).append($('<div class="div-table-th">' + record[i][0] + '</div>'))
+                      .append('<div class="div-table-td">' + record[i][2] + '</div>');
       }
     }
 

@@ -193,7 +193,7 @@ function getPeople(){
 function getData(){
    var sheet =getSheet();
    var data = null;
-   if  (sheet!=NULL){
+   if  (sheet != null){
      data = sheet.getDataRange().getValues();
    }
   return data;
