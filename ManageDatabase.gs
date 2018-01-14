@@ -160,12 +160,14 @@ function removeEmptyRows(sheet) {
  */
 
 function updateEntry(index,data) {
+    Logger.log("updating Entry:"+index);
+    Logger.log("with Data: "+data);
     var sheet = getSheet();
     if (index == null){
       sheet.insertRow(2);
     }
     else{
-      sheet.getRange(index, 1, index, data[0].length).setValues(data);
+      sheet.getRange(index+1, 1, index, data[0].length).setValues(data);
     }
 }
 

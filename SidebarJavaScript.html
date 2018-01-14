@@ -99,37 +99,48 @@
         // Replace content of the field div with new record
         $('#'+fieldId).replaceWith('<div id="'+fieldId+'" class="div-table-row"></div>');
         for (var q = 0; q < record[i].length; q++) {
-          if (q==0)
-            $('#'+fieldId).append($('<textarea placeholder='+record[0][q]+' class="div-header" onfocus="onFocus('+fieldId+')" onblur="onBlur('+fieldId+')"  rows=1>' + record[i][q] + '</textarea>'))
-          else
-            $('#'+fieldId).append($('<textarea placeholder='+record[0][q]+' class="div-main" onfocus="onFocus('+fieldId+')" onblur="onBlur('+fieldId+')"  rows=1>' + record[i][q] + '</textarea>'))
+          if (q==0){
+            $('#'+fieldId).append($('<textarea placeholder='+record[0][q]+' name="'+record[0][q]+'" class="div-header" onblur="onBlur('+i+')"  rows=1>' + record[i][q] + '</textarea>'));  
+          }
+          else{
+            $('#'+fieldId).append($('<textarea placeholder='+record[0][q]+' name="'+record[0][q]+'" class="div-main" onblur="onBlur('+i+')"  rows=1>' + record[i][q] + '</textarea>'));
+          }
         }
       }
     }
+  }
 
     // TODO: hide any existing fields that are beyond the current record length
     /*
      * @todo 
      */
-     function onFocus(fieldID){
-          google.script.run
-       .withSuccessHandler(function(msg){
+     function onFocus(i){
+       $('#sidebar-status').text("onFocus");
+     }
+     
+     function onBlur(i){
+       $('#sidebar-status').text("onBlur "+i);
+       var data = [[]];
+       var str = '' + i;
+       var fieldId = 'field-' + ('0000' + str).substring(str.length);
+       //read all Data from this block :)
+       $('#'+fieldId).children().each(function(index, obj) {
+          $('#sidebar-status').append(obj.value);
+          data[0].push(obj.value); // "this" is the current element in the loop and we read the valu of thi s into data field
+        });
+        $('#sidebar-status').append(data.toString());
+       google.script.run
+         .withSuccessHandler(function(msg){
             // Respond to failure conditions here.
-            showStatus(msg, 'info');
+            showStatus('updated', 'info');
           })
        .withFailureHandler(function(msg) {
             // Respond to failure conditions here.
             showStatus(msg, 'error');
           })
-       .updateData();
-          $('#'+fieldId).
+       .updateEntry(i,data);
      }
      
-     function onBlur(fieldID){
-          $('#'+fieldId).
-     }
-     
-    //Setup the next poll
-  }
+    //Setup the next pol
 
 </script>
