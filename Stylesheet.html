@@ -39,6 +39,7 @@ button {
 }
 
 .branding-below {
+  color: rgba(0,0,0,0.87);
   bottom: 54px;
   top: 0;
 }
@@ -109,25 +110,52 @@ label {
 .div-table{
   display:table;
   width:auto;
-/*  background-color:#eee;
-  border:1px solid  #666666;*/
   border-spacing:5px;
 }
+
 .div-table-row{
   display:table-row;
   width:auto;
   clear:both;
+  border-radius: 2px;
+  margin: 5px;
+  box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.2), 0 1px 5px 0 rgba(0,0,0,0.12);
 }
-.div-table-td, .div-table-th {
-  display:table-cell;         
-  width:200px;         
-  background-color:rgb(230, 230, 230);  
-}
-.div-table-th {
-  /*float:left;*/
+
+.div-header {
   font-weight: bold;
+  background-color: transparent;
+  border: none;
+  padding: 0;
+  outline: none;
+  overflow: hidden;
+  resize: none;
+  vertical-align: top;
+  width: 100%;
 }
-.div-table-td {
-  /*float:right;*/
+
+.div-normal {
+  background-color: transparent;
+  border: none;
+  padding: 0;
+  outline: none;
+  overflow: hidden;
+  resize: none;
+  vertical-align: top;
+  margin-left: 10px;
+  width: 100%;
 }
+
+.div-main {
+  background-color: transparent;
+  border: none;
+  padding: 0;
+  outline: none;
+  overflow: hidden;
+  resize: none;
+  vertical-align: top;
+  margin-left: 10px;
+  width: 100%;  
+}
+
 </style>

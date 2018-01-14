@@ -1,4 +1,4 @@
-/**
+ /**
  * Returns the spreadsheet
  * if there is no spreadsheet stored in the documentsettings 
  * we generate a spreadsheet with the name of the document + "_Protagonist" at the end
@@ -162,7 +162,7 @@ function removeEmptyRows(sheet) {
 function updateEntry(index,data) {
     var sheet = getSheet();
     if (index == null){
-      sheet.appendRow(data);
+      sheet.insertRow(2);
     }
     else{
       sheet.getRange(index, 1, index, data[0].length).setValues(data);

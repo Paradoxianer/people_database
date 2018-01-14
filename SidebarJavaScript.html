@@ -85,7 +85,7 @@
    */
   function showRecords(record) {
     if (record.length) {
-      for (var i = 0; i < record.length; i++) {
+      for (var i = 1; i < record.length; i++) {
         // build field name on the fly, formatted field-1234
         var str = '' + i;
         var fieldId = 'field-' + ('0000' + str).substring(str.length)
@@ -98,13 +98,37 @@
 
         // Replace content of the field div with new record
         $('#'+fieldId).replaceWith('<div id="'+fieldId+'" class="div-table-row"></div>');
-        $('#'+fieldId).append($('<div class="div-table-th">' + record[i][0] + '</div>'))
-                      .append('<div class="div-table-td">' + record[i][2] + '</div>');
+        for (var q = 0; q < record[i].length; q++) {
+          if (q==0)
+            $('#'+fieldId).append($('<textarea placeholder='+record[0][q]+' class="div-header" onfocus="onFocus('+fieldId+')" onblur="onBlur('+fieldId+')"  rows=1>' + record[i][q] + '</textarea>'))
+          else
+            $('#'+fieldId).append($('<textarea placeholder='+record[0][q]+' class="div-main" onfocus="onFocus('+fieldId+')" onblur="onBlur('+fieldId+')"  rows=1>' + record[i][q] + '</textarea>'))
+        }
       }
     }
 
     // TODO: hide any existing fields that are beyond the current record length
-
+    /*
+     * @todo 
+     */
+     function onFocus(fieldID){
+          google.script.run
+       .withSuccessHandler(function(msg){
+            // Respond to failure conditions here.
+            showStatus(msg, 'info');
+          })
+       .withFailureHandler(function(msg) {
+            // Respond to failure conditions here.
+            showStatus(msg, 'error');
+          })
+       .updateData();
+          $('#'+fieldId).
+     }
+     
+     function onBlur(fieldID){
+          $('#'+fieldId).
+     }
+     
     //Setup the next poll
   }
 
