@@ -20,9 +20,6 @@
    * Run initializations on sidebar load.
    */
   $(function() {
-    // Assign handler functions to sidebar elements here, if needed.
-  
-
     // Call the server here to retrieve any information needed to build
     // the sidebar, if necessary.
     google.script.run
@@ -72,9 +69,9 @@
    *   should be displayed as.
    */
   function showStatus(msg, classId) {
-    $('#sidebar-status').removeClass().html(msg);
+    $('#sidebar-bottom').removeClass().html(msg);
     if (classId) {
-      $('#sidebar-status').addClass(classId);
+      $('#sidebar-bottom').addClass(classId);
     }
   }
 
@@ -83,8 +80,19 @@
    *
    * @param {object[]}  Array of field headings & cell values
    */
-  function showRecords(record) {
+  function showRecords(record) { 
     if (record.length) {
+      $('#sidebar-new-block').append('<div class="div-table-row" id="new-entry"></div>');
+      var row = $('#sidebar-new-block').children()[0];
+      for (var q = 0; q < record[0].length; q++) {
+        if (q==0){
+            $(row).append($('<textarea placeholder='+record[0][q]+' name="'+record[0][q]+'" class="div-header" rows=1></textarea>'));
+          }
+          else{
+            $(row).append($('<textarea placeholder='+record[0][q]+' name="'+record[0][q]+'" class="div-main" rows=1></textarea>'));
+          }
+      };
+      $(row).append($('<div role="button" class="done goog-button" style="user-select: none;" onclick="newEntry();">Fertig</div>'))
       for (var i = 1; i < record.length; i++) {
         // build field name on the fly, formatted field-1234
         var str = '' + i;
@@ -100,47 +108,60 @@
         $('#'+fieldId).replaceWith('<div id="'+fieldId+'" class="div-table-row"></div>');
         for (var q = 0; q < record[i].length; q++) {
           if (q==0){
-            $('#'+fieldId).append($('<textarea placeholder='+record[0][q]+' name="'+record[0][q]+'" class="div-header" onblur="onBlur('+i+')"  rows=1>' + record[i][q] + '</textarea>'));  
+            $('#'+fieldId).append($('<textarea placeholder='+record[0][q]+' name="'+record[0][q]+'" class="div-header" onblur="onBlur('+i+');"  rows=1>' + record[i][q] + '</textarea>'));  
           }
           else{
-            $('#'+fieldId).append($('<textarea placeholder='+record[0][q]+' name="'+record[0][q]+'" class="div-main" onblur="onBlur('+i+')"  rows=1>' + record[i][q] + '</textarea>'));
+            $('#'+fieldId).append($('<textarea placeholder='+record[0][q]+' name="'+record[0][q]+'" class="div-main" onblur="onBlur('+i+');"  rows=1>' + record[i][q] + '</textarea>'));
           }
         }
       }
     }
   }
 
-    // TODO: hide any existing fields that are beyond the current record length
-    /*
-     * @todo 
-     */
-     function onFocus(i){
-       $('#sidebar-status').text("onFocus");
-     }
+  // TODO: hide any existing fields that are beyond the current record length
+  /*
+   * @todo 
+   */
+  function onFocus(i){
+    $('#sidebar-status').text("onFocus");
+  }
      
-     function onBlur(i){
-       $('#sidebar-status').text("onBlur "+i);
-       var data = [[]];
-       var str = '' + i;
-       var fieldId = 'field-' + ('0000' + str).substring(str.length);
-       //read all Data from this block :)
-       $('#'+fieldId).children().each(function(index, obj) {
-          $('#sidebar-status').append(obj.value);
-          data[0].push(obj.value); // "this" is the current element in the loop and we read the valu of thi s into data field
-        });
-        $('#sidebar-status').append(data.toString());
-       google.script.run
-         .withSuccessHandler(function(msg){
-            // Respond to failure conditions here.
-            showStatus('updated', 'info');
-          })
-       .withFailureHandler(function(msg) {
-            // Respond to failure conditions here.
-            showStatus(msg, 'error');
-          })
-       .updateEntry(i,data);
-     }
-     
-    //Setup the next pol
-
+  function onBlur(i){
+    $('#sidebar-bottom').text("onBlur "+i);
+    var data = [[]];
+    var str = '' + i;
+    var fieldId = 'field-' + ('0000' + str).substring(str.length);
+    //read all Data from this block :)
+    $('#'+fieldId).children().each(function(index, obj) {
+      data[0].push(obj.value); // "this" is the current element in the loop and we read the valu of thi s into data field
+    });
+    google.script.run
+      .withSuccessHandler(function(msg){
+        // Respond to failure conditions here.
+        showStatus('updated', 'info');
+      })
+      .withFailureHandler(function(msg) {
+        // Respond to failure conditions here.
+        showStatus(msg, 'error');
+      })
+      .updateEntry(i,data);
+   }
+  
+  function newEntry(){
+    var data = [[]];
+    $('#sidebar-bottom').text("newEntry ");
+    //read all Data from this block :)
+    $('#new-entry').children().each(function(index, obj) {
+      data[0].push(obj.value); // "this" is the current element in the loop and we read the valu of thi s into data field
+    });
+    google.script.run
+      .withSuccessHandler(function(msg){
+        showStatus('created', 'info');
+      })
+      .withFailureHandler(function(msg) {
+        // Respond to failure conditions here.
+        showStatus(msg, 'error');
+      })
+      .updateEntry(null,data);
+   }
 </script>

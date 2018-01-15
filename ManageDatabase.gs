@@ -164,11 +164,10 @@ function updateEntry(index,data) {
     Logger.log("with Data: "+data);
     var sheet = getSheet();
     if (index == null){
-      sheet.insertRow(2);
+      sheet.insertRows(2);
+      index = 1;
     }
-    else{
-      sheet.getRange(index+1, 1, index, data[0].length).setValues(data);
-    }
+    sheet.getRange(index+1, 1, 1, data[0].length).setValues(data);
 }
 
 /*

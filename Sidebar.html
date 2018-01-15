@@ -22,8 +22,10 @@
     <?!= HtmlService.createHtmlOutputFromFile('Stylesheet').getContent(); ?>
   </head>
   <body>
-<div class="sidebar branding-below">
+  <div class="sidebar branding-below">
   <!-- The div-table class is used to make a group of divs behave like a table. -->
+  <div class="block div-table" id="sidebar-new-block">
+  </div>
   <div class="block div-table" id="sidebar-record-block">
   </div>
   <div class="block" id="sidebar-button-bar">
@@ -31,7 +33,7 @@
   <div id="sidebar-status"></div>
   </div>
     <div class="sidebar bottom">
-      <span class="gray branding-text">Manage your protagonists in your document</span>
+      <span class="gray branding-text" id="sidebar-bottom">Loading..</span>
     </div>
     <!-- Use a templated HTML printing scriptlet to import JavaScript -->
     <?!= HtmlService.createHtmlOutputFromFile('SidebarJavaScript').getContent(); ?>
