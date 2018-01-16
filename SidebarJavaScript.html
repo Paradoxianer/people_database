@@ -22,14 +22,22 @@
   $(function() {
     // Call the server here to retrieve any information needed to build
     // the sidebar, if necessary.
-    google.script.run
+    pollData();
+  });
+
+  /**
+   *
+   *
+   */
+   function pollData(){
+     google.script.run
        .withSuccessHandler(showRecords)
        .withFailureHandler(function(msg) {
             // Respond to failure conditions here.
             showStatus(msg, 'error');
           })
        .getData();
-  });
+   }
 
   /**
    * Calls the server to modify the document.
@@ -82,27 +90,29 @@
    */
   function showRecords(record) { 
     if (record.length) {
-      $('#sidebar-new-block').append('<div class="div-table-row" id="new-entry"></div>');
-      var row = $('#sidebar-new-block').children()[0];
-      for (var q = 0; q < record[0].length; q++) {
-        if (q==0){
-            $(row).append($('<textarea placeholder='+record[0][q]+' name="'+record[0][q]+'" class="div-header" rows=1></textarea>'));
-          }
-          else{
-            $(row).append($('<textarea placeholder='+record[0][q]+' name="'+record[0][q]+'" class="div-main" rows=1></textarea>'));
-          }
+      if (!$('#new-entry').length) {
+        $('#sidebar-new-block').append('<div class="div-table-row" id="new-entry"></div>');
+        var row = $('#sidebar-new-block').children()[0];
+        for (var q = 0; q < record[0].length; q++) {
+          if (q==0){
+              $(row).append($('<textarea placeholder='+record[0][q]+' name="'+record[0][q]+'" class="div-header" rows=1></textarea>'));
+            }
+            else{
+              $(row).append($('<textarea placeholder='+record[0][q]+' name="'+record[0][q]+'" class="div-main" rows=1></textarea>'));
+            }
+        };
       };
       $(row).append($('<div role="button" class="done goog-button" style="user-select: none;" onclick="newEntry();">Fertig</div>'))
       for (var i = 1; i < record.length; i++) {
         // build field name on the fly, formatted field-1234
         var str = '' + i;
-        var fieldId = 'field-' + ('0000' + str).substring(str.length)
+        var fieldId = 'field-' + ('0000' + str).substring(str.length);
 
         // If this field # doesn't already exist on the page, create it
         if (!$('#'+fieldId).length) {
           var newField = $($.parseHTML('<div id="'+fieldId+'"></div>'));
           $('#sidebar-record-block').append(newField);
-        }
+        };
 
         // Replace content of the field div with new record
         $('#'+fieldId).replaceWith('<div id="'+fieldId+'" class="div-table-row"></div>');
@@ -112,7 +122,7 @@
           }
           else{
             $('#'+fieldId).append($('<textarea placeholder='+record[0][q]+' name="'+record[0][q]+'" class="div-main" onblur="onBlur('+i+');"  rows=1>' + record[i][q] + '</textarea>'));
-          }
+          };
         }
       }
     }
@@ -153,9 +163,11 @@
     //read all Data from this block :)
     $('#new-entry').children().each(function(index, obj) {
       data[0].push(obj.value); // "this" is the current element in the loop and we read the valu of thi s into data field
+      obj.value="";
     });
     google.script.run
       .withSuccessHandler(function(msg){
+        pollData();
         showStatus('created', 'info');
       })
       .withFailureHandler(function(msg) {
