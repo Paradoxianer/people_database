@@ -19,7 +19,17 @@ var SIDEBAR_TITLE = 'People';
 var SHEET_NAME = "People"
 var PEOPLE_DATA = 'PEOPLE_DATA';
 var PEOPLE_ENDING = "_Protagonists"
+/*
+ *
+ * Later we will expand the table for a second row... this second row defines if the column is a 
+ *    title (formatted as title and always displayed
+ *    important (formatted normal but always displayed
+ *    "normal" or "" (formatted normal and hidden when the block is not focused
+ *
+ * var CHARACTERISTIKS = [["Name","Spitzname","Beschreibung","Beruf","Körper","Zitate","links"],["title","","important","","","",""]];
+ */
 var CHARACTERISTIKS = [["Name","Spitzname","Beschreibung","Beruf","Körper","Zitate","links"]];
+
 
 
 /**
