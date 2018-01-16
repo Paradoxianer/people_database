@@ -152,24 +152,6 @@ function removeEmptyRows(sheet) {
   }
 }
 
-/**
- * if index = null means there is no entry yet in the database
- * a new row is created
- * else we replace the values with the new data
- *
- */
-
-function updateEntry(index,data) {
-    Logger.log("updating Entry:"+index);
-    Logger.log("with Data: "+data);
-    var sheet = getSheet();
-    if (index == null){
-      sheet.insertRows(2);
-      index = 1;
-    }
-    sheet.getRange(index+1, 1, 1, data[0].length).setValues(data);
-}
-
 /*
  * returns the list of people stored in the database 
  * one selected characteristik
@@ -198,4 +180,32 @@ function getData(){
      data = sheet.getDataRange().getValues();
    }
   return data;
+}
+
+/**
+ * if index = null means there is no entry yet in the database
+ * a new row is created
+ * else we replace the values with the new data
+ *
+ */
+
+function updateEntry(index,data) {
+    Logger.log("updating Entry:"+index);
+    Logger.log("with Data: "+data);
+    var sheet = getSheet();
+    if (index == null){
+      sheet.insertRows(2);
+      index = 1;
+    }
+    sheet.getRange(index+1, 1, 1, data[0].length).setValues(data);
+}
+
+function deleteEntry(index) {
+    Logger.log("deleting Entry:"+index);
+    var sheet = getSheet();
+    if (index == null){
+        //@todo return a real "error"
+       return null;
+    }
+    sheet.deleteRow(index+1);
 }
