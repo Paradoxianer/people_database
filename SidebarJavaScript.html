@@ -152,7 +152,7 @@
     var fieldId=idFromInt(i);
     //read all Data from this block :)
     $('#'+fieldId).children().each(function(index, obj) {
-      data[0].push(obj.value); // "this" is the current element in the loop and we read the valu of thi s into data field
+      data[0].push(obj.value); // "this" is the current element in the loop and we read the value of thi s into data field
     });
     google.script.run
       .withSuccessHandler(function(msg){
@@ -171,8 +171,10 @@
     $('#sidebar-bottom').text("creating New Entry ");
     //read all Data from this block :)
     $('#new-entry').children().each(function(index, obj) {
-      data[0].push(obj.value); // "this" is the current element in the loop and we read the valu of thi s into data field
-      obj.value="";
+      if ($(obj).is("textarea")){
+        data[0].push(obj.value); // "this" is the current element in the loop and we read the valu of thi s into data field
+        obj.value="";
+       }
     });
     google.script.run
       .withSuccessHandler(function(msg){

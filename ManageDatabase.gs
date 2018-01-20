@@ -195,9 +195,9 @@ function updateEntry(index,data) {
     var sheet = getSheet();
     if (index == null){
       sheet.insertRows(2);
-      index = 1;
+      index = 2;
     }
-    sheet.getRange(index+1, 1, 1, data[0].length).setValues(data);
+    sheet.getRange(index, 1, 1, data[0].length).setValues(data);
 }
 
 function deleteEntry(index) {
