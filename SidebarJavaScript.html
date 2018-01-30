@@ -118,7 +118,7 @@
 
         // Replace content of the field div with new record
         $('#'+fieldId).replaceWith('<div id="'+fieldId+'" class="div-table-row"></div>');
-        $('#'+fieldId).append($('<div class="div-del done goog-button" role="button" style="user-select: none;"  onclick="deleteEntry('+1+');"; >X</div>'));
+        $('#'+fieldId).append($('<div class="div-del done goog-button" role="button" style="user-select: none;"  onclick="deleteEntry('+i+');"; >X</div>'));
         for (var q = 0; q < record[i].length; q++) {
           if (q==0){
             $('#'+fieldId).append($('<textarea placeholder='+record[0][q]+' name="'+record[0][q]+'" class="div-header" onblur="onBlur('+i+');" onfocus="onFocus('+i+');"  rows=1>' + record[i][q] + '</textarea>'));  
@@ -152,7 +152,9 @@
     var fieldId=idFromInt(i);
     //read all Data from this block :)
     $('#'+fieldId).children().each(function(index, obj) {
-      data[0].push(obj.value); // "this" is the current element in the loop and we read the value of thi s into data field
+      if ($(obj).is("textarea")){
+        data[0].push(obj.value); // "this" is the current element in the loop and we read the value of thi s into data field
+      }
     });
     google.script.run
       .withSuccessHandler(function(msg){

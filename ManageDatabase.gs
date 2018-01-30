@@ -53,7 +53,7 @@ function createDatabase(name){
 /**
  * gets the sheet which is named "People"
  * and initalize the first colum with our given values 
- * stored in the multidimensinal Array 'CHARACTERISTIKS'
+ * stored in the multidimensinal Array 'getHeader()'
  *
  * @return {Sheet}   the Sheet where the first colum was filled
  * @todo if "People" Sheet was not found.. just create one
@@ -63,7 +63,7 @@ function createCharacteristics(ssNew){
   if (sheet == null){
     sheet = ssNew.insertSheet(SHEET_NAME)
   }
-  sheet.getRange(1, 1, 1, CHARACTERISTIKS[0].length).setValues(CHARACTERISTIKS);
+  sheet.getRange(1, 1, 1, getHeader()[0].length).setValues(getHeader());
   cleanUpEmpty(sheet);
   return sheet;
 }
@@ -105,14 +105,14 @@ function getEntryIndex(name) {
 function getEntry(name) {
   var data = getSheet().getDataRange().getValues();
   var entries = new Array(2);
-  entries[0]=new Array(CHARACTERISTIKS[0].length);
-  entries[1]=new Array(CHARACTERISTIKS[0].length);
+  entries[0]=new Array(getHeader()[0].length);
+  entries[1]=new Array(getHeader()[0].length);
   var found = false;
   for (i in data[0]) {
     if(data[0][i] == name) {
       Logger.log("found: ",name);
-      for (q=0 ; q<CHARACTERISTIKS[0].length ;q++){ 
-            entries[0][q]=CHARACTERISTIKS[0][q];
+      for (q=0 ; q<getHeader()[0].length ;q++){ 
+            entries[0][q]=getHeader()[0][q];
             entries[1][q] = data[q][i];
        }
        found = true;
@@ -195,9 +195,11 @@ function updateEntry(index,data) {
     var sheet = getSheet();
     if (index == null){
       sheet.insertRows(2);
-      index = 2;
+      index = 1;
     }
-    sheet.getRange(index, 1, 1, data[0].length).setValues(data);
+    //protect the header row at all cost :)
+    if (index>0)
+      sheet.getRange(index+1, 1, 1, data[0].length).setValues(data);
 }
 
 function deleteEntry(index) {

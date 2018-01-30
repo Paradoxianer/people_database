@@ -18,6 +18,7 @@ var DIALOG_TITLE = 'Settings';
 var SIDEBAR_TITLE = 'People';
 var SHEET_NAME = "People"
 var PEOPLE_DATA = 'PEOPLE_DATA';
+var HEADER_DATA = 'HEADER_DATA';
 var PEOPLE_ENDING = "_Protagonists"
 /*
  *
@@ -26,9 +27,9 @@ var PEOPLE_ENDING = "_Protagonists"
  *    important (formatted normal but always displayed
  *    "normal" or "" (formatted normal and hidden when the block is not focused
  *
- * var CHARACTERISTIKS = [["Name","Spitzname","Beschreibung","Beruf","Körper","Zitate","links"],["title","","important","","","",""]];
+ * var HEADER = [["Name","Spitzname","Beschreibung","Beruf","Körper","Zitate","links"],["title","","important","","","",""]];
  */
-var CHARACTERISTIKS = [["Name","Spitzname","Beschreibung","Beruf","Körper","Zitate","links"]];
+var HEADER = [["Name","Spitzname","Beschreibung","Beruf","Körper","Zitate","links"]];
 
 
 
@@ -76,7 +77,7 @@ function showSettings() {
   var ui = HtmlService.createTemplateFromFile('Dialog')
       .evaluate()
       .setWidth(400)
-      .setHeight(150)
+      .setHeight(200)
       .setSandboxMode(HtmlService.SandboxMode.IFRAME);
   DocumentApp.getUi().showModalDialog(ui, DIALOG_TITLE);
 }
@@ -117,4 +118,13 @@ function getWordAt(str, pos) {
   }
   // Return the word, using the located bounds to extract it from the string.
   return str.slice(left, right + pos);
+}
+
+
+function getHeader(){
+  var documentProperties = PropertiesService.getDocumentProperties();
+  var header = documentProperties.getProperty(HEADER_DATA);
+  if (header == null)
+    header = HEADER;
+  return header;
 }
