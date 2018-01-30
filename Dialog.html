@@ -23,19 +23,21 @@
   </head>
   <body>
     <!-- Below is the HTML code that defines the dialog element structure. -->
-    <cursor></cursor><form id="title-form">
+    <cursor></cursor>
+    <label>
+          You can set the headings for your database here
+          example: Name,Spitzname,Beschreibung,Beruf,Körper,Zitate,Links
+     </label>
+    <form id="title-form">
       <div class="block" id="dialog-elements">
-        <label for="dialog-title">
-          You can set the document title here:
-        </label>
-        <input class="width-100" id="dialog-title">
+        <input class="width-100" id="headings">
       </div>
       <div class="block" id="dialog-button-bar">
         <button type="submit" class="action" id="dialog-save-button">Save</button>
         <button id="dialog-cancel-button" onclick="google.script.host.close()">Cancel</button>
       </div>
-      <div id="dialog-status"></div>
     </form>
+    <div id="dialog-status">Status...</div>
 
     <!-- Use a templated HTML printing scriptlet to import JavaScript -->
     <?!= HtmlService.createHtmlOutputFromFile('DialogJavaScript').getContent(); ?>
