@@ -16,6 +16,7 @@
 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <script>
+  var options='<select name="FieldType"><option value="" selected>Normal</option><option value="Title">Title</option><option value="Important">Important</option></select>';
   /**
    * Run initializations on dialog load.
    */
@@ -36,6 +37,7 @@
               }
             }
             $('#headings').val(str);
+            generateTable(str);
             showStatus("Status...");
           })
        .withFailureHandler(function(msg) {
@@ -88,6 +90,22 @@
     if (classId) {
       $('#dialog-status').addClass(classId);
     }
+  }
+  
+  function generateTable(list) {
+    var strArr = list.split(/\s*,\s*/)  // split using space_or_no_space comma space_or_no_space
+    showStatus(strArr);
+    //$('#dialog-table').append($('<table><tr>'));
+    
+    for(var i=0;i<strArr.length;i++) {  // iterate through each split string
+      $('#dialog-table').append($('<td class="div-normal">'+strArr[i]+'</td>'));
+    }
+    $('#dialog-table').append($('</tr><tr>'));
+     for(var i=0;i<strArr.length;i++) {  // iterate through each split string
+      $('#dialog-table').append($('<td class="div-normal">'+options+'</td>'));
+    }
+    //$('#dialog-table').append($('</tr></table>'));
+    $('#dialog-table').append($('</tr>'));
   }
 
 </script>

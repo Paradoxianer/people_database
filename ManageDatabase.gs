@@ -28,6 +28,24 @@ function getDatabase(){
   return ssNew;
 }
 
+function getDatabaseURL(){
+  var documentProperties = PropertiesService.getDocumentProperties();
+  var id = documentProperties.getProperty(PEOPLE_DATA);
+  var ssNew=null;
+  if (id == null){ 
+    getDatabase();
+    documentProperties.getProperty(PEOPLE_DATA);
+  }
+  try{
+     ssNew = SpreadsheetApp.openById(id);
+  }
+  catch(e){
+     ssNew = createDatabase(name);
+  }
+  return ssNew.getUrl();
+}
+
+
 /**
  * Creates our database which is simply a spreadheet with the given name
  * once created we rename the first Sheet to "People"

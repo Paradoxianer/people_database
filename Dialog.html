@@ -25,8 +25,7 @@
     <!-- Below is the HTML code that defines the dialog element structure. -->
     <cursor></cursor>
     <label>
-          You can set the headings for your database here
-          example: Name,Spitzname,Beschreibung,Beruf,Körper,Zitate,Links
+          You can add, remove or rename the Fields here.
      </label>
     <form id="title-form">
       <div class="block" id="dialog-elements">
@@ -37,6 +36,7 @@
         <button id="dialog-cancel-button" onclick="google.script.host.close()">Cancel</button>
       </div>
     </form>
+    <div id="dialog-table" class="div-table"></div>
     <div id="dialog-status">Status...</div>
 
     <!-- Use a templated HTML printing scriptlet to import JavaScript -->
