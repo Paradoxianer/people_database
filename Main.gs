@@ -1,17 +1,5 @@
 /**
- * Copyright 2014 Google Inc. All Rights Reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Copyright 2017 
  */
 
 var DIALOG_TITLE = 'Settings';
@@ -27,9 +15,11 @@ var PEOPLE_ENDING = "_Protagonists"
  *    important (formatted normal but always displayed
  *    "normal" or "" (formatted normal and hidden when the block is not focused
  *
- * var HEADER = [["Name","Spitzname","Beschreibung","Beruf","Körper","Zitate","links"],["title","","important","","","",""]];
- */
 var HEADER = [["Name","Spitzname","Beschreibung","Beruf","Körper","Zitate","links"]];
+ */
+
+var HEADER = [["Name","Spitzname","Beschreibung","Beruf","Körper","Zitate","links"],["title","normal","important","normal","normal","normal","normal"]];
+
 
 
 
@@ -119,14 +109,4 @@ function getWordAt(str, pos) {
   // Return the word, using the located bounds to extract it from the string.
   return str.slice(left, right + pos);
 }
-
-
-function getHeader(){
-  var documentProperties = PropertiesService.getDocumentProperties();
-  var header = documentProperties.getProperty(HEADER_DATA);
-  if (header == null)
-    header = HEADER;
-  return header;
-}
-
 

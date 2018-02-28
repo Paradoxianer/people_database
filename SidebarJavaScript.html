@@ -16,6 +16,12 @@
 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <script>
+
+var FIELD_FORMAT = { 
+	"title":"div-header",
+	"normal":"div-normal",
+	"important":"div-main"
+}
   /**
    * Run initializations on sidebar load.
    */
@@ -96,16 +102,11 @@
         $('#sidebar-new-block').append('<div class="div-table-row" id="new-entry"></div>');
         var row = $('#sidebar-new-block').children()[0];
         for (var q = 0; q < record[0].length; q++) {
-          if (q==0){
-              $(row).append($('<textarea placeholder='+record[0][q]+' name="'+record[0][q]+'" class="div-header"  onfocus="onFocus();" rows=1></textarea>'));
-            }
-            else{
-              $(row).append($('<textarea placeholder='+record[0][q]+' name="'+record[0][q]+'" class="div-main"  onfocus="onFocus();" rows=1></textarea>'));
-            }
+            $(row).append($('<textarea placeholder='+record[0][q]+' name="'+record[0][q]+'" class="'+FIELD_FORMAT[record[1][q]]+'" onfocus="onFocus();" rows=1></textarea>'));
         };
       };
       $(row).append($('<div role="button" class="done goog-button" style="user-select: none;" onclick="newEntry();">Fertig</div>'))
-      for (var i = 1; i < record.length; i++) {
+      for (var i = 2; i < record.length; i++) {
         // build field name on the fly, formatted field-1234
         var str = '' + i;
         var fieldId = 'field-' + ('0000' + str).substring(str.length);
@@ -120,12 +121,7 @@
         $('#'+fieldId).replaceWith('<div id="'+fieldId+'" class="div-table-row"></div>');
         $('#'+fieldId).append($('<div class="div-del done goog-button" role="button" style="user-select: none;"  onclick="deleteEntry('+i+');"; >X</div>'));
         for (var q = 0; q < record[i].length; q++) {
-          if (q==0){
-            $('#'+fieldId).append($('<textarea placeholder='+record[0][q]+' name="'+record[0][q]+'" class="div-header" onblur="onBlur('+i+');" onfocus="onFocus('+i+');"  rows=1>' + record[i][q] + '</textarea>'));  
-          }
-          else{
-            $('#'+fieldId).append($('<textarea placeholder='+record[0][q]+' name="'+record[0][q]+'" class="div-main" onblur="onBlur('+i+');"  onfocus="onFocus('+i+');" rows=1>' + record[i][q] + '</textarea>'));
-          };
+            $('#'+fieldId).append($('<textarea placeholder='+record[0][q]+' name="'+record[0][q]+'" class="'+FIELD_FORMAT[record[1][q]]+'" onblur="onBlur('+i+');" onfocus="onFocus('+i+');"  rows=1>' + record[i][q] + '</textarea>'));  
         };
       }
     }
@@ -138,7 +134,7 @@
    */
   function onFocus(i){
     $('#sidebar-bottom').text("onFocus:" + i);
-    $('.div-main').hide();
+    $('.div-normal').hide();
     var fieldId=idFromInt(i);
     if (i == null)
       fieldId = 'new-entry';
@@ -209,6 +205,4 @@
     var fieldId = 'field-' + ('0000' + str).substring(str.length);
     return fieldId;
   }
-    
-  
 </script>

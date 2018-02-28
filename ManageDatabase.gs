@@ -78,10 +78,11 @@ function createDatabase(name){
  */
 function createCharacteristics(ssNew){ 
   var sheet = ssNew.getSheetByName(SHEET_NAME);
+  var header =  getHeader();
   if (sheet == null){
     sheet = ssNew.insertSheet(SHEET_NAME)
   }
-  sheet.getRange(1, 1, 1, getHeader()[0].length).setValues(getHeader());
+  sheet.getRange(1, 1, header.length, header[0].length).setValues(header);
   cleanUpEmpty(sheet);
   return sheet;
 }
@@ -212,11 +213,11 @@ function updateEntry(index,data) {
     Logger.log("with Data: "+data);
     var sheet = getSheet();
     if (index == null){
-      sheet.insertRows(2);
-      index = 1;
+      sheet.insertRows(getHeader().length+1);
+      index = getHeader().length;
     }
     //protect the header row at all cost :)
-    if (index>0)
+    if (index>1)
       sheet.getRange(index+1, 1, 1, data[0].length).setValues(data);
 }
 
@@ -227,5 +228,28 @@ function deleteEntry(index) {
         //@todo return a real "error"
        return null;
     }
-    sheet.deleteRow(index+1);
+    sheet.deleteRow(index+getHeader().length);
+}
+
+//* returns the header stored in documentProperties
+function getHeader(){
+  var documentProperties = PropertiesService.getDocumentProperties();
+  var header = documentProperties.getProperty(HEADER_DATA);
+  if (header == null)
+    header = HEADER;
+  return header;
+}
+
+
+/* creates the header for the table from the handed over list and sets the
+ * document propterties to the new individual header
+ */
+function setHeader(list){
+  var documentProperties = PropertiesService.getDocumentProperties();
+  if (list != null){
+    documentProperties.setProperty(HEADER_DATA, list);
+  } else {
+    documentProperties.setProperty(HEADER_DATA, HEADER);
+  }
+  createCharacteristics();
 }
